@@ -5,7 +5,7 @@
 
 
 const { Router } = require('express');
-const { check } = require('express-validator');
+const { check, validationResult } = require('express-validator');
 const { crearUsuario, loginUsuario, revalidarToken } = require('../controllers/auth');
 const { validarCampos } = require('../middlewares/validacionDeCampos');
 
@@ -17,7 +17,8 @@ router.post(
     [
         check('email', 'El email es obligatorio').isEmail(),
         check('password', 'La contraseña debe ser superior a 8 caracteres').isLength({ min: 8 }),
-        check('password', 'La contraseña debe ser alfanumerica y sin numeros consecutivos').isAlphanumeric(),
+        check('password', 'La contraseña debe ser alfanumerica').not().isAlpha(),
+        check('password', 'La contraseña debe ser alfanumerica').not().isNumeric(),
         validarCampos
     ],
     crearUsuario 
