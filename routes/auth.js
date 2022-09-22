@@ -6,28 +6,34 @@
 
 const { Router } = require('express');
 const { check } = require('express-validator');
-const router = Router();
-
 const { crearUsuario, loginUsuario, revalidarToken } = require('../controllers/auth');
+const { validarCampos } = require('../middlewares/validacionDeCampos');
 
-
-
-
-
+const router = Router();
 
 
 router.post(
     '/new',
     [
-        check('name', 'El nombre es obligatorio').not().isEmpty(),
         check('email', 'El email es obligatorio').isEmail(),
+        check('password', 'La contraseña debe ser superior a 8 caracteres').isLength({ min: 8 }),
+        check('password', 'La contraseña debe ser alfanumerica y sin numeros consecutivos').isAlphanumeric(),
+        validarCampos
     ],
     crearUsuario 
-    );
+);
 
 
 
-router.post('/', loginUsuario );
+router.post(
+    '/', 
+    [
+        check('email', 'Debe proporcionar un email').isEmail(),
+        check('password', 'Debe proporcionar una contraseña valida').isLength({ min: 8 }),
+        validarCampos
+    ],
+    loginUsuario 
+);
 
 
 
