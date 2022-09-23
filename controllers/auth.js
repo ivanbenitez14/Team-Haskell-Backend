@@ -96,6 +96,14 @@ const loginUsuario = async(req, res = response ) => {
 
 }
 
+const loginWithGithub = (req, res = response ) => {
+
+    res.json({
+        ok: true,
+        msg: 'github'
+    })
+}
+
 
 const revalidarToken = async(req, res = response ) => {
 
@@ -112,5 +120,6 @@ const revalidarToken = async(req, res = response ) => {
 module.exports = {
     crearUsuario,
     loginUsuario,
-    revalidarToken
+    revalidarToken,
+    loginWithGithub
 }

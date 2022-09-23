@@ -6,7 +6,7 @@
 
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { crearUsuario, loginUsuario, revalidarToken } = require('../controllers/auth');
+const { crearUsuario, loginUsuario, revalidarToken, loginWithGithub } = require('../controllers/auth');
 const { validarCampos } = require('../middlewares/validacionDeCampos');
 const { validarJWT } = require('../middlewares/validacionJwt');
 
@@ -38,6 +38,8 @@ router.post(
     loginUsuario 
 );
 
+
+router.post('/github', loginWithGithub);
 
 
 router.get('/renew', validarJWT, revalidarToken );
