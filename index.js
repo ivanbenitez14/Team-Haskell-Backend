@@ -3,24 +3,29 @@ const { dbConnection } = require('./database/config');
 require('dotenv').config();
 const cors = require('cors');
 
-// Github login
+// Dependencias para Github login 
 const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
 const session = require('express-session');
+const Usuario = require('./models/Usuario');
 
 
 // Creacion del servidor de Express
 const app = express();
 
+
 // Github login
 app.use(passport.initialize());
 app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 
+
 // DB
 dbConnection();
 
+
 // CORS para proteccion de rutas
 app.use(cors());
+
 
 // Directorio publico
 app.use( express.static('public') );
@@ -41,12 +46,7 @@ app.listen( process.env.PORT, () => {
 });
 
 
-
-
-
-
 // Github login
-
 passport.serializeUser(function(user, done) {
     done(null, user);
 });
@@ -61,9 +61,9 @@ passport.use(new GitHubStrategy({
     callbackURL: "http://127.0.0.1:4000/auth/github/callback"
   },
   function(accessToken, refreshToken, profile, done) {
-    /*User.findOrCreate({ githubId: profile.id }, function (err, user) {
-      return done(err, user);
-    });*/
+    //Usuario.findOrCreate({ githubId: profile.id }, function (err, user) {
+    //  return done(err, user);
+    //});
     console.log(profile);
     done(null, profile);
   }

@@ -96,14 +96,35 @@ const loginUsuario = async(req, res = response ) => {
 
 }
 
-const loginWithGithub = (req, res = response ) => {
+const actualizarUserInformation = async(req, res = response ) => {
 
-    res.json({
-        ok: true,
-        msg: 'github'
-    })
+    const _id = req.params._id;
+    
+
+    try {
+        const usuario = await Usuario.findById( _id );
+        const uid = req.uid;
+
+        const nuevaInfo = {
+            ...req.body,
+            user: uid
+        }
+        
+        const infoUsuarioActualizado = await Usuario.findByIdAndUpdate( _id, nuevaInfo, { new: true } );
+
+        res.json({
+            ok: true,
+            usuario: infoUsuarioActualizado
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador'
+        })
+    }
 }
-
 
 const revalidarToken = async(req, res = response ) => {
 
@@ -121,5 +142,5 @@ module.exports = {
     crearUsuario,
     loginUsuario,
     revalidarToken,
-    loginWithGithub
+    actualizarUserInformation
 }

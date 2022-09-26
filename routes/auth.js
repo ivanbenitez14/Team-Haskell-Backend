@@ -6,7 +6,7 @@
 
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { crearUsuario, loginUsuario, revalidarToken, loginWithGithub } = require('../controllers/auth');
+const { crearUsuario, loginUsuario, revalidarToken, actualizarUserInformation } = require('../controllers/auth');
 const { validarCampos } = require('../middlewares/validacionDeCampos');
 const { validarJWT } = require('../middlewares/validacionJwt');
 
@@ -39,13 +39,20 @@ router.post(
 );
 
 
-router.post('/github', loginWithGithub);
-
 
 router.get('/renew', validarJWT, revalidarToken );
 
 
 
+
+// ACTUALIZAR INFO DE USUARIO
+router.put('/:_id', actualizarUserInformation );
+
+
+
+
+// BORRAR INFO DE USUARIO
+//router.delete('/:id', eliminarInfo );
 
 
 
