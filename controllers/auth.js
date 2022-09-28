@@ -103,11 +103,16 @@ const actualizarUserInformation = async(req, res = response ) => {
 
     try {
         const usuario = await Usuario.findById( _id );
-        const uid = req.uid;
+
+        if ( !usuario ) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'No existe un usuario registrado con ese email'
+            });
+        }
 
         const nuevaInfo = {
             ...req.body,
-            user: uid
         }
         
         const infoUsuarioActualizado = await Usuario.findByIdAndUpdate( _id, nuevaInfo, { new: true } );
