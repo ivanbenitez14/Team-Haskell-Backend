@@ -34,8 +34,7 @@ const crearUsuario = async(req, res = response ) => {
     
         res.status(201).json({
             ok: true,
-            uid: usuario.id,
-            email: usuario.email,
+            ...usuario._doc,
             token
         })
 
@@ -81,8 +80,7 @@ const loginUsuario = async(req, res = response ) => {
 
         res.status(200).json({
             ok: true,
-            uid: usuario.id,
-            email: usuario.email,
+            ...usuario._doc,
             token
         })
 
@@ -92,6 +90,26 @@ const loginUsuario = async(req, res = response ) => {
             ok: false,
             msg: 'Por favor contacte al administrador'
         })
+    }
+
+}
+
+const userInformation = async(req, res = response ) => {
+
+    const _id = req.params._id;
+    
+
+    try {
+        const usuario = await Usuario.findById( _id );
+
+        if ( !usuario ) {
+            return res.status(400).json({
+                ok: false,
+                msg: ''
+            });
+        }
+    } catch(error) {
+        console.log(error);
     }
 
 }
@@ -115,11 +133,13 @@ const actualizarUserInformation = async(req, res = response ) => {
             ...req.body,
         }
         
+        console.log(nuevaInfo);
+
         const infoUsuarioActualizado = await Usuario.findByIdAndUpdate( _id, nuevaInfo, { new: true } );
 
         res.json({
             ok: true,
-            usuario: infoUsuarioActualizado
+            ...infoUsuarioActualizado._doc
         })
 
     } catch (error) {
@@ -137,10 +157,12 @@ const revalidarToken = async(req, res = response ) => {
 
     const token = await generarJWT( uid, email )
 
+    const _id = uid;
+
+    const usuario = await Usuario.findById( _id );
     res.json({
         ok: true,
-        uid,
-        email,
+        ...usuario._doc,
         token
     })
 }

@@ -51,12 +51,6 @@ router.put('/:_id', actualizarUserInformation );
 
 
 
-// BORRAR INFO DE USUARIO
-//router.delete('/:id', eliminarInfo );
-
-
-
-
 
 
 module.exports = router;
