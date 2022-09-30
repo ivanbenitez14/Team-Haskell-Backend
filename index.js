@@ -38,6 +38,10 @@ app.use( express.json() );
 // Rutas
 app.use('/api/auth', require('./routes/auth') );
 
+app.get('*', (req, res) => {
+  res.sendFile( __dirname + '/public/index.html');
+})
+
 
 // Puerto donde se escuchan las peticiones
 app.listen( process.env.PORT, () => {
