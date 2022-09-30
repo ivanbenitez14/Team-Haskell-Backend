@@ -66,9 +66,9 @@ const loginUsuario = async(req, res = response ) => {
         }
 
         // Match de passwords
-        const validPassword = bcrypt.compareSync( password, usuario.password );
+        //const validPassword = bcrypt.compareSync( password, usuario.password );
 
-        if ( !validPassword ) {
+        if ( usuario.password !== password ) {
             return res.status(400).json({
                 ok: false,
                 msg: 'Password incorrecto'
