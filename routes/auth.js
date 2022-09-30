@@ -46,7 +46,14 @@ router.get('/renew', validarJWT, revalidarToken );
 
 
 // ACTUALIZAR INFO DE USUARIO
-router.put('/:_id', actualizarUserInformation );
+router.put('/:_id',
+    [
+        check('password', 'La contraseña debe ser alfanumerica').not().isAlpha(),
+        check('password', 'La contraseña debe ser superior a 8 caracteres').isLength({ min: 8 }),
+        validarCampos
+    ],
+    actualizarUserInformation 
+);
 
 
 
