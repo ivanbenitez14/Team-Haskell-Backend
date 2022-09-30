@@ -8,15 +8,21 @@ const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
 const session = require('express-session');
 const Usuario = require('./models/Usuario');
-
-
+const passportSetup = require('./passport')
+const cookieSession = require('cookie-session')
 // Creacion del servidor de Express
 const app = express();
 
+app.use(
+  cookieSession({ name: "session", keys: ["lama"], maxAge: 24 * 60 * 60 * 100 })
+);
 
 // Github login
 app.use(passport.initialize());
-app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
+app.use(passport.session())
+
+
+//app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 
 
 // DB
@@ -49,36 +55,9 @@ app.listen( process.env.PORT, () => {
 });
 
 
-// Github login
-passport.serializeUser(function(user, done) {
-    done(null, user);
-});
-  
-passport.deserializeUser(function(obj, done) {
-    done(null, obj);
-});
 
-passport.use(new GitHubStrategy({
-    clientID: process.env.GITHUB_CLIENT_ID,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: "http://127.0.0.1:4000/auth/github/callback"
-  },
-  function(accessToken, refreshToken, profile, done) {
-    //Usuario.findOrCreate({ githubId: profile.id }, function (err, user) {
-    //  return done(err, user);
-    //});
-    console.log(profile);
-    done(null, profile);
-  }
-));
 
-app.get('/auth/github',
-  passport.authenticate('github', { scope: [ 'user:email' ] }));
 
-app.get('/auth/github/callback', 
-  passport.authenticate('github', { failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
-});
+
+
 

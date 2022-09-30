@@ -9,6 +9,7 @@ const { check } = require('express-validator');
 const { crearUsuario, loginUsuario, revalidarToken, actualizarUserInformation } = require('../controllers/auth');
 const { validarCampos } = require('../middlewares/validacionDeCampos');
 const { validarJWT } = require('../middlewares/validacionJwt');
+const passport = require('passport');
 
 
 const router = Router();
@@ -49,10 +50,23 @@ router.get('/renew', validarJWT, revalidarToken );
 router.put('/:_id',
     [
         check('password', 'La contraseña debe ser alfanumerica').not().isAlpha(),
+        check('password', 'La contraseña debe ser alfanumerica').not().isNumeric(),
         check('password', 'La contraseña debe ser superior a 8 caracteres').isLength({ min: 8 }),
         validarCampos
     ],
     actualizarUserInformation 
+);
+
+
+
+router.get("/github", passport.authenticate("github", { scope: ["user:email"] }));
+
+router.get(
+  "/github/callback",
+  passport.authenticate("github", {
+    successRedirect: 'https://teamhaskell.herokuapp.com/',
+    failureRedirect: "https://teamhaskell.herokuapp.com/auth/login",
+  })
 );
 
 
