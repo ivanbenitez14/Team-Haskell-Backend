@@ -132,8 +132,6 @@ const actualizarUserInformation = async(req, res = response ) => {
         const nuevaInfo = {
             ...req.body,
         }
-        
-        console.log(nuevaInfo);
 
         const infoUsuarioActualizado = await Usuario.findByIdAndUpdate( _id, nuevaInfo, { new: true } );
 
